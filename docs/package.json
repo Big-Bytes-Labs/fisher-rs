@@ -1,0 +1,16 @@
+{
+  "name": "euler-docs",
+  "version": "1.0.0",
+  "description": "Official docs for euler crate",
+  "main": "index.js",
+  "repository": "https://www.github.com/vilayat-ali/euler",
+  "author": "Syed Vilayat Ali Rizvi <vilayatcodemysite@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "tailwind:build": "yarn tailwindcss -c ./tailwind.config.js -i ./src/styles/tailwind.css -o ./src/styles/dist.css --minify",
+    "tailwind:watch": "yarn tailwindcss -c ./tailwind.config.js -i ./src/styles/tailwind.css -o ./src/styles/dist.css --watch"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.3.3"
+  }
+}

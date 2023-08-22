@@ -1,0 +1,15 @@
+[package]
+name = "ramanujan"
+version = "0.1.0"
+edition = "2021"
+author = "Syed Vilayat Ali Rizvi <vilayatcodemysite@gmail.com>"
+description = "A fast, powerful, flexible and easy to use open source data analysis and manipulation tool written in Rust"
+license = "LICENSE"
+homepage = ""
+documentation = ""
+repository = "https://www.github.com/vilayat-ali/"
+readme = "Readme.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
