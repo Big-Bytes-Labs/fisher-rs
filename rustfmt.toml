@@ -1,0 +1,65 @@
+# rustfmt configuration file
+
+# Maximum width of lines in the output code.
+max_width = 100
+
+# Indentation configuration
+tab_spaces = 4
+use_tabs = false
+normalize_comments = true
+
+# Control the formatting of comments
+comment_width = 80
+
+# Where to place trailing commas
+trailing_comma = "always"
+
+# How to format function arguments
+fn_args_layout = "Block"
+
+# How to format struct literal fields
+struct_lit_width = "Auto"
+
+# How to format imports
+imports_indent = "Block"
+imports_layout = "Mixed"
+
+# How to format where clauses
+where_layout = "Mixed"
+
+# Blank line after imports
+imports_granularity = "Crate"
+
+# How to format chain expressions
+chain_width = "Auto"
+
+# How to format chains of if-else expressions
+chain_format = "Visual"
+
+# How to format match expressions
+match_block_trailing_comma = true
+
+# How to format match expressions with arms on the same line
+match_arm_blocks = "Collapsed"
+
+# Remove trailing white space
+trim_trailing_whitespace = true
+
+# How to format comments
+comment_prefer_single_line = true
+comment_convert_literals = true
+
+# Format code in doc comments
+format_code_in_doc_comments = true
+
+# Configure reordering of imports
+reorder_imports = true
+
+# How to handle imports with multiple paths
+reorder_imports_with_glob = true
+
+# Allow to format code with unstable features (nightly-only)
+unstable_features = false
+
+# Ensure that formatting is applied to all files
+recursive = true
