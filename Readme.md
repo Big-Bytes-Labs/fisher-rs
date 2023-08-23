@@ -1,6 +1,6 @@
-# Ramanujan
+# Fisher-rs
 
-A fast, powerful, flexible and easy to use open source data analysis and manipulation tool written in Rust.
+A fast, powerful, flexible and easy to use open source data analysis and manipulation library written in Rust.
 
 
 ## Features:
