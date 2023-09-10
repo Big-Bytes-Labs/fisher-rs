@@ -10,6 +10,52 @@ pub enum Series {
     Float64(Vec<f64>),
 }
 
+impl Series {
+    pub fn len(&self) -> usize {
+        match self {
+            Self::Char(vec) => vec.len(),
+            Self::Str(vec) => vec.len(),
+            Self::Int32(vec) => vec.len(),
+            Self::Int64(vec) => vec.len(),
+            Self::Float32(vec) => vec.len(),
+            Self::Float64(vec) => vec.len(),
+        }
+    }
+    pub fn mean(&self) -> f64 {
+        match self {
+            Self::Int32(vec) => vec.iter().map(|&x| x as f64).sum::<f64>() / vec.len() as f64,
+            Self::Int64(vec) => vec.iter().map(|&x| x as f64).sum::<f64>() / vec.len() as f64,
+            Self::Float32(vec) => vec.iter().map(|&x| x as f64).sum::<f64>() / vec.len() as f64,
+            Self::Float64(vec) => vec.iter().map(|&x| x as f64).sum::<f64>() / vec.len() as f64,
+            _ => panic!("Operation not supported!"),
+        }
+    }
+    pub fn median(&self) -> f64 {
+        match self {
+            Self::Int32(vec) => {
+                let mut vec = vec.clone(); 
+                vec.sort();
+                vec[vec.len() / 2] as f64
+            },
+            Self::Int64(vec) => {
+                let mut vec = vec.clone();
+                vec.sort();
+                vec[vec.len() / 2] as f64
+            },
+            Self::Float32(vec) => {
+                let mut vec = vec.clone();
+                vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
+                vec[vec.len() / 2] as f64
+            },
+            Self::Float64(vec) => {
+                let mut vec = vec.clone();
+                vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
+                vec[vec.len() / 2] as f64
+            },
+            _ => panic!("Operation not supported!"),
+        } 
+    }
+}
 pub trait StrDataSeries<T> where T: Clone {
     fn concat(&self) -> String;
     fn contains(&self, pattern: &'static str) -> bool;
