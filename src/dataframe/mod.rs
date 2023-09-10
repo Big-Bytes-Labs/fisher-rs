@@ -1,4 +1,5 @@
 use std::{collections::HashMap, fs::File, io::{self, BufRead}};
+use crate::series::Series;
 
 /// A data frame in **fisher-rs**, is a Two-Dimensional data structure, portenstitially heterogeneous tabular data structure with labeled 
 /// axes rows, and columns.
@@ -12,7 +13,7 @@ use std::{collections::HashMap, fs::File, io::{self, BufRead}};
 /// 
 #[derive(Debug)]
 pub struct DataFrame {
-    pub frame: HashMap<String, String>,
+    pub frame: HashMap<String, Series>,
     pub size: (usize, usize),
 }
 

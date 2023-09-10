@@ -1,7 +1,14 @@
 use std::error::Error;
 
 #[derive(Debug, Clone)]
-pub struct Series<T>(Vec<T>);
+pub enum Series {
+    Char(Vec<char>),
+    Str(Vec<String>),
+    Int32(Vec<i32>),
+    Int64(Vec<i64>),
+    Float32(Vec<f32>),
+    Float64(Vec<f64>),
+}
 
 pub trait StrDataSeries<T> where T: Clone {
     fn concat(&self) -> String;
