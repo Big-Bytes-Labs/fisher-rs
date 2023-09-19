@@ -13,7 +13,7 @@ use crate::series::Series;
 /// 
 #[derive(Debug)]
 pub struct DataFrame {
-    pub frame: HashMap<String, Series>,
+    pub frame: HashMap<String, Vec<String>>,
     pub size: (usize, usize),
 }
 
@@ -24,18 +24,25 @@ impl DataFrame {
         let file = File::open(file_path)?;
         let reader = io::BufReader::new(file);
         let mut frame: HashMap<String, Vec<String>> = HashMap::new();
+        let mut records = Vec::new();
 
         for line in reader.lines() {
             let record: Vec<String> = line?.split(',').map(|s| s.to_string()).collect::<Vec<String>>();
-            println!("{:?}", record);
+            records.push(record);
+        }
+
+        // initializing the frame
+        for cell in 0..records[0].len() {
+            frame.insert(records[0][cell].clone(), (1..records.len()).map(|row| records[row][cell].clone()).collect::<Vec<String>>());
         }
 
         Ok(Self {
-            frame: HashMap::new(),
+            frame,
             size: (0, 0)
         })
     }
 
+    // creating data frame from csv
     pub fn from_json() -> Self {
         Self {
             frame: HashMap::new(),
