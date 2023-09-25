@@ -1,4 +1,7 @@
-use std::error::Error;
+pub mod num;
+pub mod str;
+
+use serde_json;
 
 #[derive(Debug, Clone)]
 pub enum Series {
@@ -19,43 +22,9 @@ impl Series {
             Self::Float64(vec) => vec.len(),
         }
     }
-    pub fn mean(&self) -> f64 {
-        match self {
-            Self::Int32(vec) => vec.iter().map(|&x| x as f64).sum::<f64>() / vec.len() as f64,
-            Self::Int64(vec) => vec.iter().map(|&x| x as f64).sum::<f64>() / vec.len() as f64,
-            Self::Float32(vec) => vec.iter().map(|&x| x as f64).sum::<f64>() / vec.len() as f64,
-            Self::Float64(vec) => vec.iter().map(|&x| x as f64).sum::<f64>() / vec.len() as f64,
-            _ => panic!("Operation not supported!"),
-        }
-    }
-    pub fn median(&self) -> f64 {
-        match self {
-            Self::Int32(vec) => {
-                let mut vec = vec.clone(); 
-                vec.sort();
-                vec[vec.len() / 2] as f64
-            },
-            Self::Int64(vec) => {
-                let mut vec = vec.clone();
-                vec.sort();
-                vec[vec.len() / 2] as f64
-            },
-            Self::Float32(vec) => {
-                let mut vec = vec.clone();
-                vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
-                vec[vec.len() / 2] as f64
-            },
-            Self::Float64(vec) => {
-                let mut vec = vec.clone();
-                vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
-                vec[vec.len() / 2] as f64
-            },
-            _ => panic!("Operation not supported!"),
-        } 
-    }
 }
 
-pub trait StrDataSeries<T> where T: Clone {
+pub trait StrDataSeries {
     fn concat(&self) -> String;
     fn contains(&self, pattern: &'static str) -> bool;
     fn join<'a>(&self, separator: &'a str) -> String;
@@ -67,14 +36,13 @@ pub trait StrDataSeries<T> where T: Clone {
     fn is_alpha(&self) -> bool;
 }
 
-pub trait NumDataSeries<T> where T: PartialEq + PartialOrd {
+pub trait NumDataSeries  {
     fn mean(&self) -> f64;
-    fn median(&self) -> T;
-    fn mode(&self) -> T;
-    fn min(&self) -> T;
-    fn max(&self) -> T;
-    fn sum(&self) -> T;
-    fn product(&self) -> Result<T, Box<dyn Error>>;
+    fn median(&self) -> f64;
+    fn mode(&self) -> f64;
+    fn min(&self) -> f64;
+    fn max(&self) -> f64;
+    fn sum(&self) -> f64;
+    fn product(&self) -> f64;
     fn std_deviation(&self) -> f64;
 }
-
