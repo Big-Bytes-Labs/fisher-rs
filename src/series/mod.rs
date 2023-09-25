@@ -2,7 +2,6 @@ use std::error::Error;
 
 #[derive(Debug, Clone)]
 pub enum Series {
-    Char(Vec<char>),
     Str(Vec<String>),
     Int32(Vec<i32>),
     Int64(Vec<i64>),
@@ -13,7 +12,6 @@ pub enum Series {
 impl Series {
     pub fn len(&self) -> usize {
         match self {
-            Self::Char(vec) => vec.len(),
             Self::Str(vec) => vec.len(),
             Self::Int32(vec) => vec.len(),
             Self::Int64(vec) => vec.len(),
@@ -56,6 +54,7 @@ impl Series {
         } 
     }
 }
+
 pub trait StrDataSeries<T> where T: Clone {
     fn concat(&self) -> String;
     fn contains(&self, pattern: &'static str) -> bool;

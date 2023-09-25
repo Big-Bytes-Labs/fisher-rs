@@ -1,6 +1,21 @@
 use std::{collections::HashMap, fs::File, io::{self, BufRead}};
 use crate::series::Series;
 
+macro_rules! construct_series {
+    ($val: expr) => {{
+        let vec = $val;
+        let sample_el = vec[0].clone();
+        match sample_el.trim().parse::<i32>() {
+            Ok(val) => {
+                Series::Int32(vec.into_iter().map(|x: String| x.to_string().trim().parse::<i32>().unwrap()).collect::<Vec<i32>>())
+            },
+            Err(_) => {
+                Series::Str(vec)
+            },
+        }
+    }};
+}
+
 /// A data frame in **fisher-rs**, is a Two-Dimensional data structure, portenstitially heterogeneous tabular data structure with labeled 
 /// axes rows, and columns.
 /// 
@@ -13,7 +28,7 @@ use crate::series::Series;
 /// 
 #[derive(Debug)]
 pub struct DataFrame {
-    pub frame: HashMap<String, Vec<String>>,
+    pub frame: HashMap<String, Series>,
     pub size: (usize, usize),
 }
 
@@ -23,7 +38,7 @@ impl DataFrame {
     pub fn from_csv(file_path: &str, _delimiter: Option<&'static str>) -> Result<Self, Box<dyn std::error::Error>> {
         let file = File::open(file_path)?;
         let reader = io::BufReader::new(file);
-        let mut frame: HashMap<String, Vec<String>> = HashMap::new();
+        let mut frame: HashMap<String, Series> = HashMap::new();
         let mut records = Vec::new();
 
         for line in reader.lines() {
@@ -33,12 +48,13 @@ impl DataFrame {
 
         // initializing the frame
         for cell in 0..records[0].len() {
-            frame.insert(records[0][cell].clone(), (1..records.len()).map(|row| records[row][cell].clone()).collect::<Vec<String>>());
+            frame.insert(records[0][cell].clone(), construct_series!((1..records.len()).map(|row| records[row][cell].clone()).collect::<Vec<String>>()));
         }
+
 
         Ok(Self {
             frame,
-            size: (0, 0)
+            size: (1, 0)
         })
     }
 
