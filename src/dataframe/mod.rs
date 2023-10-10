@@ -6,7 +6,7 @@ macro_rules! construct_series {
         let vec = $val;
         let sample_el = vec[0].clone();
         match sample_el.trim().parse::<i32>() {
-            Ok(val) => {
+            Ok(_val) => {
                 Series::Int32(vec.into_iter().map(|x: String| x.to_string().trim().parse::<i32>().unwrap()).collect::<Vec<i32>>())
             },
             Err(_) => {
