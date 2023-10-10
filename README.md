@@ -4,7 +4,7 @@
 [![Crates.io](https://img.shields.io/crates/v/fisher-rs.svg?style=flat-square)](https://crates.io/crates/fisher-rs)
 [![License](https://img.shields.io/crates/l/fisher-rs.svg?style=flat-square)](LICENSE)
 
-![fisher-rs](path/to/your/logo.png)
+![fisher-rs](./assets/logo.png)
 
 **fisher-rs** is a Rust library that brings powerful data manipulation and analysis capabilities to Rust developers, inspired by the popular pandas library in Python. It aims to provide an intuitive and efficient way to work with structured data, making it easier to perform data wrangling, transformation, and analysis tasks in Rust projects.
 
