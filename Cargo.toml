@@ -2,7 +2,7 @@
 name = "fisher"
 version = "0.1.0"
 edition = "2021"
-author = ["Syed Vilayat Ali Rizvi <vilayatcodemysite@gmail.com>"]
+# author = ["Syed Vilayat Ali Rizvi <vilayatcodemysite@gmail.com>"]
 categories = []
 description = "A fast, powerful, flexible and easy to use open source data analysis and manipulation tool written in Rust"
 license = "MIT"
@@ -16,5 +16,8 @@ rust-version = "1.56.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.75"
-serde_json = "1.0.107"
+
+[features]
+csv = []
+json = []
+all = ["csv", "json"]
