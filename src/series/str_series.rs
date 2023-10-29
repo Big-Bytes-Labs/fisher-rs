@@ -44,13 +44,13 @@ impl StrSeries for Series {
 
     fn to_uppercase(&mut self) {
         if let Series::Str(ref mut vec) = self {
-            let _ = vec.iter_mut().for_each(|str_data| *str_data = str_data.to_uppercase());
+            vec.iter_mut().for_each(|str_data| *str_data = str_data.to_uppercase());
         }
     }
 
     fn to_lowercase(&mut self) {
         if let Series::Str(ref mut vec) = self {
-            let _ = vec.iter_mut().for_each(|str_data| *str_data = str_data.to_lowercase());
+            vec.iter_mut().for_each(|str_data| *str_data = str_data.to_lowercase());
         }
     }
 
