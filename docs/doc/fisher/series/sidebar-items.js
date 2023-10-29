@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Series"],"macro":["is_num"],"mod":["num_series","str_series"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"macro":["is_num"],"mod":["errors","prelude","results","series"]};
