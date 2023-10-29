@@ -1,1 +1,0 @@
-window.ALL_CRATES = ["fisher","proc_macro2","quote","syn","thiserror","thiserror_impl","unicode_ident"];
