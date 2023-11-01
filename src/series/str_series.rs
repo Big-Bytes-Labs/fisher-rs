@@ -2,7 +2,7 @@ use crate::series::Series;
 use crate::is_num;
 
 pub trait StrSeries {
-    fn new(data: Vec<String>) -> Self;
+    fn new<T>(data: T) -> Self where T: Into<Vec<String>>;
     fn append(&mut self, element: impl Into<String>);
     fn pop(&mut self) -> Option<String>;
     fn remove(&mut self, index: usize) -> Option<String>;
@@ -16,8 +16,8 @@ pub trait StrSeries {
 }
 
 impl StrSeries for Series {
-    fn new(data: Vec<String>) -> Self {
-        Self::Str(data)
+    fn new<T>(data: T) -> Self where T: Into<Vec<String>> {
+        Self::Str(data.into())
     }
 
     fn append(&mut self, element: impl Into<String>) {
