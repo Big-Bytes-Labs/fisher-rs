@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use super::Series;
 
 pub trait NumSeries {
+
     fn sum(&self) -> Option<f64>;
     fn product(&self) -> Option<f64>;
 
@@ -24,7 +25,6 @@ pub trait NumSeries {
 }
 
 impl NumSeries for Series {
-
     fn sum(&self) -> Option<f64> {
         if let Series::Num(ref vec) = &self {
             Some(vec.iter().sum::<f64>())
