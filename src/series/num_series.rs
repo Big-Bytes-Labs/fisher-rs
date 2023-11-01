@@ -3,7 +3,6 @@ use std::collections::HashMap;
 use super::Series;
 
 pub trait NumSeries {
-    fn new<T>(data: T) -> Self where T: Into<Vec<f64>>;
     fn sum(&self) -> Option<f64>;
     fn product(&self) -> Option<f64>;
 
@@ -25,9 +24,6 @@ pub trait NumSeries {
 }
 
 impl NumSeries for Series {
-    fn new<T>(data: T) -> Self  where T: Into<Vec<f64>> {
-        Self::Num(data.into())
-    }
 
     fn sum(&self) -> Option<f64> {
         if let Series::Num(ref vec) = &self {
