@@ -27,6 +27,7 @@ pub enum Series {
 }
 
 impl Series {
+
     pub fn len(&self) -> usize {
         match &self {
             Self::Str(ref v) => v.len(),

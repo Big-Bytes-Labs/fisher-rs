@@ -3,6 +3,9 @@ use std::collections::HashMap;
 use super::Series;
 
 pub trait NumSeries {
+    fn new<T>(data: T) -> Self 
+    where 
+        Self: NumSeries, T: Into<Vec<f64>>;
 
     fn sum(&self) -> Option<f64>;
     fn product(&self) -> Option<f64>;
@@ -25,6 +28,13 @@ pub trait NumSeries {
 }
 
 impl NumSeries for Series {
+    fn new<T>(data: T) -> Self 
+    where 
+        Self: NumSeries, T: Into<Vec<f64>> 
+    {
+        Self::Num(data.into())
+    }
+
     fn sum(&self) -> Option<f64> {
         if let Series::Num(ref vec) = &self {
             Some(vec.iter().sum::<f64>())
@@ -51,7 +61,7 @@ impl NumSeries for Series {
 
     fn median(&self) -> Option<f64> {
         if let Series::Num(ref vec) = &self {
-            if vec.len() == 0 {
+            if vec.is_empty() {
                 return None;
             }
             let mut sorted_vec: Vec<f64> = vec.clone();
@@ -72,10 +82,7 @@ impl NumSeries for Series {
                 let count = frequency_map.entry(el.to_string()).or_insert(0);
                 *count += 1;
             }
-            match frequency_map.into_iter().max_by_key(|el| el.1) {
-                Some((el, _)) => Some(el.parse::<f64>().unwrap()),
-                None => None
-            }
+            frequency_map.into_iter().max_by_key(|el| el.1).map(|(el, _)| el.parse::<f64>().unwrap())
         } else {
             None
         }
@@ -85,7 +92,7 @@ impl NumSeries for Series {
         if let Series::Num(ref vec) = self {
             match self.mean() {
                 Some(mean) => {
-                    let squared_diff_sum: f64 = vec.clone().into_iter().map(|el| ((el - mean) as f64).powi(2)).sum();
+                    let squared_diff_sum: f64 = vec.clone().into_iter().map(|el| (el - mean).powi(2)).sum();
                     let variance = squared_diff_sum / (vec.len() as f64);
                     Some(variance.sqrt())
                 },
@@ -98,7 +105,7 @@ impl NumSeries for Series {
 
     fn min(&self) -> Option<f64> {
         if let Series::Num(ref vec) = &self {
-            if vec.len() == 0 {
+            if vec.is_empty() {
                 return None;
             }
 
@@ -112,7 +119,7 @@ impl NumSeries for Series {
 
     fn max(&self) -> Option<f64> {
         if let Series::Num(ref vec) = &self {
-            if vec.len() == 0 {
+            if vec.is_empty() {
                 return None;
             }
 
@@ -144,7 +151,7 @@ impl NumSeries for Series {
 
     fn div(&mut self, num: f64) {
         if let Series::Num(ref mut vec) = self {
-            vec.iter_mut().for_each(|el| *el = *el / num)
+            vec.iter_mut().for_each(|el| *el /= num)
         } 
     }
 
