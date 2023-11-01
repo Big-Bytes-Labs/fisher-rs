@@ -19,7 +19,7 @@ pub trait NumSeries {
     fn mul(&mut self, num: f64);
     fn div(&mut self, num: f64);
 
-    fn replace_with(&mut self, val: Option<f64>); // fill empty values
+    fn replace_with(&mut self, val: Option<f64>); 
     fn filter<T>(&self, predicate: T) -> Option<Vec<f64>> where T: FnMut(&f64) -> bool;
 }
 
