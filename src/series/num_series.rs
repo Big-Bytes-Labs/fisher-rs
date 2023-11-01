@@ -1,6 +1,6 @@
-use super::Series;
-
 use std::collections::HashMap;
+
+use super::Series;
 
 pub trait NumSeries {
     fn sum(&self) -> Option<f64>;
@@ -20,6 +20,7 @@ pub trait NumSeries {
     fn div(&mut self, num: f64);
 
     fn replace_with(&mut self, val: Option<f64>); // fill empty values
+    fn filter<T>(&self, predicate: T) -> Option<Vec<f64>> where T: FnMut(&f64) -> bool;
 }
 
 impl NumSeries for Series {
@@ -152,6 +153,16 @@ impl NumSeries for Series {
                 .for_each(|el| {
                     *el = val.unwrap_or_default()
                 })
+        }
+    }
+
+    fn filter<T>(&self, predicate: T) -> Option<Vec<f64>> where T: FnMut(&f64) -> bool {
+        if let Series::Num(ref vec) = self {
+            Some(vec.clone().into_iter()
+                .filter(predicate)
+                .collect::<Vec<f64>>())
+        } else {
+            None
         }
     }
 
