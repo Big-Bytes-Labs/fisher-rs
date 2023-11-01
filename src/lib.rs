@@ -29,23 +29,6 @@
 ///
 /// Then, you can start using the library in your code:
 ///
-///```no_run
-/// use fisher_rs::prelude::*;
-///
-/// fn main() {
-///    // Create a DataFrame
-///    let mut df = DataFrame::new();
-///    df.add_column("name", Series::new(vec!["Alice", "Bob", "Charlie"]));
-///    df.add_column("age", Series::new(vec![25, 30, 22]));
-///
-///    // Perform data manipulation
-///    let filtered = df.filter(df.column("age").gt(25));
-///
-///    // Display the result
-///    println!("{}", filtered);
-///}
-///```
-
 /// For more examples and detailed usage, check out the documentation.
 /// 
 
