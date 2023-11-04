@@ -20,25 +20,15 @@ macro_rules! is_num {
 
 pub use is_num;
 
+use self::{str_series::StrSeries, num_series::NumSeries};
+
 #[derive(Debug)]
-pub enum Series {
-    Str(Vec<String>),
-    Num(Vec<f64>),
+pub enum SeriesType {
+    Str(StrSeries),
+    Num(NumSeries)
 }
 
-impl Series {
 
-    pub fn len(&self) -> usize {
-        match &self {
-            Self::Str(ref v) => v.len(),
-            Self::Num(ref v) => v.len(),
-        }
-    }
-
-    pub fn is_empty(&self) -> bool {
-        match &self {
-            Self::Str(ref v) => v.is_empty(),
-            Self::Num(ref v) => v.is_empty(),
-        }
-    }
+pub trait Series {
+    fn len(&self) -> usize;
 }

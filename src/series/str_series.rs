@@ -1,114 +1,74 @@
-use crate::series::Series;
 use crate::is_num;
+use super::Series;
 
-pub trait StrSeries {
-    fn new<T>(data: T) -> Self 
-    where 
-        Self: StrSeries, T: Into<Vec<String>>;
-    fn append(&mut self, element: impl Into<String>);
-    fn pop(&mut self) -> Option<String>;
-    fn remove(&mut self, index: usize) -> Option<String>;
-    fn to_uppercase(&mut self);
-    fn to_lowercase(&mut self);
-    fn average_char_count(&self) -> Option<f64>;
-    fn is_alpha(&self) -> Option<bool>;
-    fn is_num(&self) -> Option<bool>;
-    fn cat(&self, separator: Option<&str>) -> Option<String>;
-    fn strip(&mut self);
-}
+#[derive(Debug)]
+pub struct StrSeries(pub Vec<String>);
 
-impl StrSeries for Series {
-    fn new<T>(data: T) -> Self 
+impl StrSeries {
+    pub fn new<T>(data: T) -> Self 
     where 
         T: Into<Vec<String>>
     {
-        Self::Str(data.into())
+        StrSeries(data.into())
     }
 
-    fn append(&mut self, element: impl Into<String>) {
-        if let Series::Str(ref mut vec) = self {
-            vec.push(element.into());
-        }
+    pub fn append(&mut self, element: impl Into<String>) {
+        self.0.push(element.into());
     }
 
-    fn pop(&mut self) -> Option<String> {
-        if let Series::Str(ref mut vec) = self {
-            vec.pop()
-        } else {
-            None
-        }
+    pub fn pop(&mut self) -> Option<String> {
+        self.0.pop()
     }
 
-    fn remove(&mut self, index: usize) -> Option<String> {
-        if let Series::Str(ref mut vec) = self {
-            Some(vec.remove(index))
-        } else {
-            None
-        }
+    pub fn remove(&mut self, index: usize) -> String {
+        self.0.remove(index)
     }
 
-    fn to_uppercase(&mut self) {
-        if let Series::Str(ref mut vec) = self {
-            vec.iter_mut().for_each(|str_data| *str_data = str_data.to_uppercase());
-        }
+    pub fn to_uppercase(&mut self) {
+        self.0.iter_mut().for_each(|str_data| *str_data = str_data.to_uppercase());
     }
 
-    fn to_lowercase(&mut self) {
-        if let Series::Str(ref mut vec) = self {
-            vec.iter_mut().for_each(|str_data| *str_data = str_data.to_lowercase());
-        }
+    pub fn to_lowercase(&mut self) {
+        self.0.iter_mut().for_each(|str_data| *str_data = str_data.to_lowercase());
     }
 
-    fn average_char_count(&self) -> Option<f64> {
-        if let Series::Str(ref vec) = self {
-            let sum_of_chars: usize = vec.iter().map(|str_data| {
+    pub fn average_char_count(&self) -> f64 {
+            let sum_of_chars: usize = self.0.iter().map(|str_data| {
                 str_data.len()
             }).sum();
 
-            Some(sum_of_chars as f64 / vec.len() as f64)
-        } else {
-            None
-        }
+            sum_of_chars as f64 / self.0.len() as f64
     }
 
-    fn is_alpha(&self) -> Option<bool> {
-        if let Series::Str(ref vec) = self {
-            for el in vec.iter() {
-                if is_num!(el) {
-                    return Some(false);
-                }
+    pub fn is_alpha(&self) -> bool {
+        for el in self.0.iter() {
+            if is_num!(el) {
+                return false;
             }
-            Some(true)
-        } else {
-            None
         }
+        true
     }
 
-    fn is_num(&self) -> Option<bool> {
-        if let Series::Str(ref vec) = self {
-            for el in vec.iter() {
-                if !is_num!(el) {
-                    return Some(false);
-                }
+    pub fn is_num(&self) -> bool {
+        for el in self.0.iter() {
+            if !is_num!(el) {
+                return false;
             }
-            Some(true)
-        } else {
-            None
         }
+        true
+    }    
+
+    pub fn cat(&self, separator: Option<&str>) -> String {
+        self.0.iter().map(|data_str| data_str.to_owned()).collect::<Vec<String>>().join(separator.unwrap_or(""))
     }
 
-    fn cat(&self, separator: Option<&str>) -> Option<String> {
-        if let Series::Str(ref vec) = self {
-            Some(vec.iter().map(|data_str| data_str.to_owned()).collect::<Vec<String>>().join(separator.unwrap_or("")))
-        } else {
-            None
-        }
+    pub fn strip(&mut self) {
+        self.0.iter_mut().for_each(|data_str| *data_str = data_str.trim().to_string());
     }
+}
 
-    fn strip(&mut self) {
-        if let Series::Str(ref mut vec) = self {
-            vec.iter_mut().for_each(|data_str| *data_str = data_str.trim().to_string());
-        }
+impl Series for StrSeries {
+    fn len(&self) -> usize {
+        self.0.len()
     }
-
 }

@@ -34,33 +34,106 @@
 
 pub mod series;
 pub mod errors;
-pub mod results;
 
-pub use std::collections::HashMap;
+pub use std::{collections::HashMap, fs::File};
+
+use series::{SeriesType, Series, num_series::{self, NumSeries}, str_series::{self, StrSeries}};
+
+#[macro_export]
+macro_rules! read_csv {
+    ($path:expr) => {
+        {
+            use std::{fs::File, io::Read, collections::HashMap};
+            use fisher::{Dataframe, series::{is_num, SeriesType, num_series::NumSeries, str_series::StrSeries}};
+
+            let mut csv_file: File = match File::open($path) {
+                Ok(file) => file,
+                Err(e) => panic!("{}", e)
+            };
+            let mut contents: String = String::with_capacity(1_000_000);
+            match csv_file.read_to_string(&mut contents) {
+                Ok(_) => {
+                    let mut df_map: HashMap<String, SeriesType> = HashMap::new();
+
+                    let rows: Vec<Vec<String>> = contents
+                        // split dataset buffer string into rows
+                        .split('\n')
+                        .map(|row_str| row_str.to_owned())
+                        .collect::<Vec<String>>()
+                        .into_iter()
+                        .map(|row| {
+                            // splitting rows into cells
+                            row.split(',')
+                                .map(|cell_str| cell_str.to_owned())
+                                .collect::<Vec<String>>()
+                                .iter()
+                                .map(|cell| {
+                                    cell.trim().to_owned()
+                                })
+                                .collect::<Vec<String>>()
+                        }).collect::<Vec<Vec<String>>>();
+
+                    let size: (usize, usize) = (rows.len(), rows[0].len());
+
+                    for cell_idx in 0..rows[0].len() {
+                        match is_num!(&rows[1][cell_idx]) {
+                            true => {
+                                let vec: Vec<f64> = (1..rows.len()).map(|row_idx| {
+                                    rows[row_idx][cell_idx].parse::<f64>().unwrap()
+                                }).collect::<Vec<f64>>();
+                                df_map.insert(rows[0][cell_idx].to_string(), SeriesType::Num(NumSeries(
+                                    vec
+                                )));
+                            },
+                            false => {
+                                let vec: Vec<String> = (1..rows.len()).map(|row_idx| {
+                                    rows[row_idx][cell_idx].to_owned()
+                                }).collect::<Vec<String>>();
+                                df_map.insert(rows[0][cell_idx].to_string(), SeriesType::Str(StrSeries(
+                                    vec
+                                )));
+                            }
+                        }
+                    }
+                        
+                    Dataframe {
+                        frame: df_map,
+                        size
+                    }
+                },
+                Err(e) => panic!("{}", e)
+            }
+        }
+    };
+}
+
+#[derive(Debug)]
 
 pub struct Dataframe {
-    pub frame: HashMap<String, String>,
+    pub frame: HashMap<String, SeriesType>,
     pub size: (usize, usize),
 }
 
-pub trait DataFrame {
-    fn generate_frame() -> Self;
-
-    fn print_first(&self);
-
-    fn print_last(&self);
-}
-
-impl DataFrame for Dataframe {
-    fn generate_frame() -> Self {
-        todo!()
+impl Dataframe {
+    pub fn df(&self) -> &HashMap<String, SeriesType> {
+            &self.frame
     }
 
-    fn print_first(&self) {
-        
+    pub fn df_mut(&mut self) -> &mut HashMap<String, SeriesType> {
+        &mut self.frame
     }
 
-    fn print_last(&self) {
-        
-    }
+    pub fn get_col<'a, T, R>(&self, col_header: T) -> Option<&R>
+        where T: Into<&'a String>, R: Series
+        {
+            match self.frame.get(col_header.into()) {
+                Some(series) => {
+                    match series {
+                        SeriesType::Num(series) => Some(series),
+                        SeriesType::Str(series) => Some(series)
+                    }
+                },
+                None => None,
+            }
+        }
 }
