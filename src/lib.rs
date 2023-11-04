@@ -123,15 +123,15 @@ impl Dataframe {
         &mut self.frame
     }
 
-    pub fn get_col<'a, T, R>(&self, col_header: T) -> Option<&R>
-        where T: Into<&'a String>, R: Series
+    pub fn get_col<'a>(&self, col_header: &'a str) -> Option<&SeriesType>
         {
-            match self.frame.get(col_header.into()) {
+           match self.frame.get(col_header) {
                 Some(series) => {
-                    match series {
-                        SeriesType::Num(series) => Some(series),
-                        SeriesType::Str(series) => Some(series)
-                    }
+                    Some(series)
+                    // match series {
+                    //     SeriesType::Num(series) => Some(series),
+                    //     SeriesType::Str(series) => Some(series)
+                    // }
                 },
                 None => None,
             }
